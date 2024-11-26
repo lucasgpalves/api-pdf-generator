@@ -59,45 +59,6 @@ Esta API permite a geração de documentos em PDF com informações extraídas d
 
 ## Endpoints da API
 
-### GET /reports/{report_id}
-
-Gera e retorna um PDF com base nos dados extraídos para o relatório especificado.
-
-- **URL**: `/reports/{report_id}`
-- **Método HTTP**: `GET`
-- **Parâmetros**:
-  - `report_id` (int): ID do relatório no banco de dados.
-- **Resposta**:
-  - `200 OK`: Retorna o PDF gerado para o relatório.
-  - `404 Not Found`: Se o `report_id` não for encontrado.
-- **Exemplo de Requisição**:
-  ```http
-  GET /reports/123
-  ```
-
-### POST /reports
-
-Cria um novo relatório no banco de dados e, opcionalmente, gera um PDF imediatamente.
-
-- **URL**: `/reports`
-- **Método HTTP**: `POST`
-- **Body**:
-  - `title` (str): Título do relatório.
-  - `content` (str): Conteúdo detalhado do relatório.
-  - `generate_pdf` (bool, opcional): Indica se o PDF deve ser gerado imediatamente (default: `false`).
-- **Resposta**:
-  - `201 Created`: Relatório criado com sucesso.
-  - `400 Bad Request`: Caso falte algum campo obrigatório ou o formato esteja incorreto.
-- **Exemplo de Requisição**:
-  ```json
-  POST /reports
-  {
-    "title": "Relatório de Vendas",
-    "content": "Detalhes sobre as vendas do mês de outubro...",
-    "generate_pdf": true
-  }
-  ```
-
 ## Exemplos de Uso
 
 Para obter o PDF de um relatório com `report_id = 123`, use:
@@ -120,36 +81,14 @@ curl -X POST "http://localhost:8000/reports" -H "Content-Type: application/json"
 nome-do-projeto/
 ├── app/
 │   ├── main.py          # Arquivo principal da aplicação FastAPI
-│   ├── database.py      # Configuração e conexão com o banco de dados
-│   ├── models.py        # Modelos do SQLAlchemy para o PostgreSQL
-│   ├── schemas.py       # Definições de schemas Pydantic para a API
-│   ├── crud.py          # Funções CRUD para interagir com o banco
+│   ├── connection.py      # Configuração e conexão com o banco de dados
 │   ├── pdf_generator.py # Lógica para gerar PDFs com FPDF
+│   ├── queries.py          # Funções CRUD para interagir com o banco
 ├── tests/               # Testes unitários e de integração
 │   ├── test_reports.py
 ├── .env                 # Variáveis de ambiente (não comitar)
 ├── requirements.txt     # Dependências do projeto
 └── README.md            # Documentação do projeto
-```
-
-## Execução e Testes
-
-### Rodando os Testes
-Para executar os testes, rode o seguinte comando:
-```bash
-pytest
-```
-
-### Exemplo de Teste
-Em `tests/test_reports.py`, um teste básico para verificar a criação de um relatório:
-```python
-def test_create_report():
-    response = client.post("/reports", json={
-        "title": "Teste",
-        "content": "Conteúdo de teste",
-        "generate_pdf": True
-    })
-    assert response.status_code == 201
 ```
 
 ---
